@@ -67,6 +67,8 @@ public class DataPreparation {
 	public void runSubisidiaryMethods(){
 		Model.constraintsNumberForCourses=SubsidiaryMethods.countConstraintNumberForCourses(Model.constraints);
 		System.out.println(Model.constraintsNumberForCourses);
+		Model.unasignedLecturesNumber=SubsidiaryMethods.countUnassignedLecturesNumber(Model.curicula);
+		System.out.println(Model.unasignedLecturesNumber);
 		Model.inicialTimetable=new Timetable(Model.rooms.size());
 		final TimetablePrinter printer= new TimetablePrinter(System.out);
 		printer.printTimetable(Model.inicialTimetable.timetable);
@@ -91,7 +93,7 @@ public class DataPreparation {
 			i--;
 		}
 		Curriculum curr=new  Curriculum(name, nrOfCourses, courses);
-		Model.couricula.put(curr.getId(), curr);
+		Model.curicula.add(curr);
 		System.out.println(curr);
 	}
 
