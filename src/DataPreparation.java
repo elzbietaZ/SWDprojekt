@@ -3,12 +3,16 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Algorithms.SubsidiaryMethods;
 import Model.Course;
 import Model.Curriculum;
 import Model.Model;
 import Model.Room;
 import Model.Teacher;
+import Model.Timetable;
 import Model.UnavailabilityConstraint;
+import Tools.PrettyPrinter;
+import Tools.TimetablePrinter;
 
 
 public class DataPreparation {
@@ -59,6 +63,14 @@ public class DataPreparation {
 		
 		
 	}
+	
+	public void runSubisidiaryMethods(){
+		Model.constraintsNumberForCourses=SubsidiaryMethods.countConstraintNumberForCourses(Model.constraints);
+		System.out.println(Model.constraintsNumberForCourses);
+		Model.inicialTimetable=new Timetable(Model.rooms.size());
+		final TimetablePrinter printer= new TimetablePrinter(System.out);
+		printer.printTimetable(Model.inicialTimetable.timetable);
+	}
 
 	private void readUnavailabilityConstraints(Scanner in, String courseName) {
 		int day=in.nextInt();
@@ -86,7 +98,7 @@ public class DataPreparation {
 	private void readRoom(Scanner in, String roomName) {
 		int capacity=in.nextInt();
 		Room room= new Room(roomName, capacity);
-		Model.rooms.put(room.getId(), room);
+		Model.rooms.add(room);
 		System.out.println(room);		
 	}
 
