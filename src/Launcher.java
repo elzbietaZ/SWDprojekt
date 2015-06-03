@@ -1,5 +1,6 @@
 import Algorithms.Initialization;
 import Model.Model;
+import Tools.TimetablePrinter;
 
 
 public class Launcher {
@@ -10,6 +11,8 @@ public class Launcher {
 		dp.runSubisidiaryMethods();
 		Initialization initialization=new Initialization();
 		initialization.makeInitialPlan();
+		final TimetablePrinter printer= new TimetablePrinter(System.out);
+		printer.printTimetable(Model.inicialTimetable.timetable);
 	}
 
 }

@@ -77,8 +77,6 @@ public class DataPreparation {
 		System.out.println("Nieprzypisane w poszczególnych potokach");
 		System.out.println(Model.unassignedInCurricula);
 		Model.inicialTimetable=new Timetable(Model.rooms.size(), Model.curicula.size());
-		final TimetablePrinter printer= new TimetablePrinter(System.out);
-		printer.printTimetable(Model.inicialTimetable.timetable);
 	}
 
 	private void readUnavailabilityConstraints(Scanner in, String courseName) {

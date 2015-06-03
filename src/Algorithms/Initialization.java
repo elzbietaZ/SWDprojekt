@@ -24,16 +24,16 @@ public class Initialization {
 		int t=0;
 		Course c=getCourseToAssign();
 		while(c!=null){
-			System.out.println(c.getName());
-			System.out.println(Model.constraintsNumberForCourses);
-			System.out.println(Model.unasignedLecturesNumber.toString());
+//			System.out.println(c.getName());
+//			System.out.println(Model.constraintsNumberForCourses);
+//			System.out.println(Model.unasignedLecturesNumber.toString());
 			int unassignedCount=Model.unasignedLecturesNumber.get(c.getId());
 			Model.unasignedLecturesNumber.replace(c.getId(), unassignedCount-1);
 			
 			Curriculum curr=getCurriculumToAssign(c);
-			System.out.println(Model.unassignedInCurricula);
+//			System.out.println(Model.unassignedInCurricula);
 			
-			//findTimeAndRoom(curr, c);
+			findTimeAndRoom(curr, c);
 			
 			c=getCourseToAssign();
 
@@ -49,21 +49,24 @@ public class Initialization {
 			for(int k=0; k<Params.timeSlotsCount; k++){
 				int assignment=curriculaDayTimeSlot[j][k];
 				if(assignment==0 && constraintsFullfiled(c,j,k)){
-					Room foundAppropriateRoom=findAndAssignToRoom(curr,c,j,k);
-					if(foundAppropriateRoom!=null) break;
+					Room foundAppropriateRoom=findRoom(curr,c,j,k);
+					if(foundAppropriateRoom!=null){
+						makeFinalAssignment(c, curr, j, k, foundAppropriateRoom);
+						return;
+					}
 				}
 			}
 		}
 		
 	}
 
-	private Room findAndAssignToRoom(Curriculum curr, Course c, int day, int timeSlot) {
+	private Room findRoom(Curriculum curr, Course c, int day, int timeSlot) {
 		
 		Room smallerPossibleFreeRoom=null;
 		int [][][] roomDayTimeSlot=Model.inicialTimetable.roomDayTimeSlot;
 		for(int roomId=0; roomId<Model.rooms.size(); roomId++){
 			Room room=Model.rooms.get(roomId);
-			if(roomDayTimeSlot[roomId][day][timeSlot]==0 && c.getNrOfStudents()<room.getCapacity()){
+			if(roomDayTimeSlot[roomId][day][timeSlot]==0 && c.getNrOfStudents()<=room.getCapacity()){
 				if(smallerPossibleFreeRoom==null){
 					smallerPossibleFreeRoom=room;
 				}
@@ -75,6 +78,13 @@ public class Initialization {
 			}
 		}
 		return smallerPossibleFreeRoom;
+		
+	}
+	
+	private void makeFinalAssignment(Course course, Curriculum curr, int day, int timeSlot, Room room){
+		Model.inicialTimetable.curriculaDayTimeSlot[curr.getId()][day][timeSlot]=course.getId();
+		Model.inicialTimetable.roomDayTimeSlot[room.getId()][day][timeSlot]=course.getId();
+		Model.inicialTimetable.timetable[day][timeSlot][room.getId()]=new Tuple(curr.getId(), course.getName());
 		
 	}
 
