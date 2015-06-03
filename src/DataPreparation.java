@@ -80,8 +80,8 @@ public class DataPreparation {
 	}
 
 	private void readUnavailabilityConstraints(Scanner in, String courseName) {
-		int day=in.nextInt();
 		int dayPeriod=in.nextInt();
+		int day=in.nextInt();
 		UnavailabilityConstraint constraint=new UnavailabilityConstraint(Model.courses.get(courseName.hashCode()), day, dayPeriod);
 		Model.constraints.add(constraint);
 		System.out.println(constraint);

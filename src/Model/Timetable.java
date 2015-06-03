@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import Algorithms.Params;
@@ -13,6 +14,8 @@ public class Timetable {
 	public Tuple<Integer, Integer> [][][] timetable;
 	public int [][][] curriculaDayTimeSlot;
 	public int [][][] roomDayTimeSlot;
+	public int [][][] courseDayTimeSlot;
+	public ArrayList [][] dayCurrCourse;
 	
 	int roomsCount;
 	int curriculaNr;
@@ -26,6 +29,7 @@ public class Timetable {
 		initializeTimetable();
 		initializeCurriculaTable();
 		initializeRoomsTable();
+		initializeDaysTable();
 	}
 	
 	/**
@@ -57,6 +61,23 @@ public class Timetable {
 				for(int k=0; k<Params.timeSlotsCount; k++){
 					roomDayTimeSlot[i][j][k]=0;
 				}
+			}
+		}
+	}
+	private void initializeCoursTable(){
+		for(int i=0; i<Model.courses.size(); i++){
+			for(int j=0; j<Params.workingDays; j++){
+				for(int k=0; k<Params.timeSlotsCount; k++){
+					courseDayTimeSlot[i][j][k]=0;
+				}
+			}
+		}
+	}
+	private void initializeDaysTable(){
+		dayCurrCourse=new ArrayList[Params.workingDays][Model.curicula.size()];
+		for(int day=0; day<Params.workingDays; day++){
+			for(int curr=0; curr<Model.curicula.size(); curr++){
+				dayCurrCourse[day][curr]=new ArrayList<>();
 			}
 		}
 	}

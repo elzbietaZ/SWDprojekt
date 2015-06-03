@@ -1,5 +1,7 @@
 package Model;
 
+import Algorithms.Params;
+
 /**
  * Courses: <CourseID> <Teacher> <# Lectures> <MinWorkingDays> <# Students>
  */
@@ -12,6 +14,7 @@ public class Course {
 	private int nrOfLectures;
 	private int minWorkingDays;
 	private int nrOfStudents;
+	private int [][] daysTimeSlotsAssignements;
 	
 	public Course(String name, Teacher teacher, int nrOfLectures,
 			int minWorkingDays, int nrOfStudents) {
@@ -21,7 +24,31 @@ public class Course {
 		this.nrOfLectures = nrOfLectures;
 		this.minWorkingDays = minWorkingDays;
 		this.nrOfStudents = nrOfStudents;
+		daysTimeSlotsAssignements= new int[Params.workingDays][Params.timeSlotsCount];
+		intitializeAssignementsTable();
 	}
+
+	private void intitializeAssignementsTable() {
+		for(int day=0; day<Params.workingDays; day++){
+			for(int timeSlot=0; timeSlot<Params.timeSlotsCount; timeSlot++){
+				daysTimeSlotsAssignements[day][timeSlot]=0;
+			}
+		}
+	}
+	
+	public boolean checkIfAssignmentPossible(int day, int timeSlot){
+		if(daysTimeSlotsAssignements[day][timeSlot]==0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public void makeAssignment(int day, int timeSlot, Course c){
+		daysTimeSlotsAssignements[day][timeSlot]=c.getId();
+	}
+	
 
 	public int getId() {
 		return id;
