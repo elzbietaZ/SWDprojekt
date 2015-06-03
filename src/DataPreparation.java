@@ -65,11 +65,18 @@ public class DataPreparation {
 	}
 	
 	public void runSubisidiaryMethods(){
+		System.out.println("Ograniczenia: ");
 		Model.constraintsNumberForCourses=SubsidiaryMethods.countConstraintNumberForCourses(Model.constraints);
+		Model.constraintsForCourses=SubsidiaryMethods.countConstraintForCourses(Model.constraints);
 		System.out.println(Model.constraintsNumberForCourses);
+		System.out.println(Model.constraintsForCourses);
+		System.out.println("Nieprzypisane zajêcia: ");
 		Model.unasignedLecturesNumber=SubsidiaryMethods.countUnassignedLecturesNumber(Model.curicula);
 		System.out.println(Model.unasignedLecturesNumber);
-		Model.inicialTimetable=new Timetable(Model.rooms.size());
+		Model.unassignedInCurricula=SubsidiaryMethods.countUnassignedForCurricula(Model.curicula);
+		System.out.println("Nieprzypisane w poszczególnych potokach");
+		System.out.println(Model.unassignedInCurricula);
+		Model.inicialTimetable=new Timetable(Model.rooms.size(), Model.curicula.size());
 		final TimetablePrinter printer= new TimetablePrinter(System.out);
 		printer.printTimetable(Model.inicialTimetable.timetable);
 	}

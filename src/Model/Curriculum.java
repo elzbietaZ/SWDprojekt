@@ -11,7 +11,7 @@ public class Curriculum {
 	private ArrayList<Course> courses;
 	
 	public Curriculum(String name, int nrOfCourses, ArrayList<Course> courses) {
-		this.id=name.hashCode();
+		this.id=Model.curriculaCounter++;
 		this.name = name;
 		this.nrOfCourses = nrOfCourses;
 		this.courses = courses;

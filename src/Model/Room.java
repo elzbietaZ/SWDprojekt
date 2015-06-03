@@ -10,7 +10,7 @@ public class Room {
 	public Room(String name, int capacity) {
 		this.name = name;
 		this.capacity = capacity;
-		this.id=name.hashCode();
+		this.id=Model.roomCounter++;
 	}
 	
 	public int getId() {

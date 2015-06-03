@@ -2,6 +2,7 @@ package Tools;
 import java.io.PrintStream;
 
 import Algorithms.Params;
+import Model.Tuple;
 
 import static java.lang.String.format;
 import static java.lang.System.out;
@@ -112,7 +113,7 @@ public class PrettyPrinter {
         return value == null ? asNull : value.toString();
     }
 
-	public void print(int[][] intArray) {
+	public void print(Tuple[][] intArray) {
 		String[][] stringArray= new String[intArray.length][intArray[0].length];
 		for(int j=0; j<intArray.length; j++){
 			for(int k=0; k<intArray[j].length; k++){

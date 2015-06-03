@@ -1,0 +1,41 @@
+Name: Wlasny
+Courses: 5
+Rooms: 3
+Days: 5
+Periods_per_day: 5
+Curricula: 2
+Constraints: 11
+
+COURSES:
+Algorytmy Ratajczak 3 3 30 
+Analiza Górniak 2 2 42 
+Algebra Pietraszko 4 4 40 
+Logika Nguyen 4 4 18 
+Sieci Grzech 2 3 50
+
+ROOMS:
+Sala1 32 
+Sala2 50
+Sala3 40 
+ 
+
+CURRICULA:
+Plan1 4 Algorytmy Analiza Algebra Sieci
+Plan2 3 Algebra Logika Sieci
+ 
+
+UNAVAILABILITY_CONSTRAINTS:
+Algebra 2 0 
+Algebra 2 1 
+Algebra 3 2 
+Algebra 3 3 
+Analiza 4 0 
+Analiza 4 1 
+Analiza 4 2 
+Analiza 4 3 
+Sieci 4  2
+Sieci 4  3
+Sieci 4  4 
+
+END.
+ 

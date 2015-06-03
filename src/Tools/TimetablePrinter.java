@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import Model.Model;
 import Model.Room;
+import Model.Tuple;
 
 public class TimetablePrinter extends PrettyPrinter{
 
@@ -21,7 +22,7 @@ public class TimetablePrinter extends PrettyPrinter{
 		out.println();
 	}
 	
-	public void printTimetable(int[][][] intArray) {
+	public void printTimetable(Tuple[][][] intArray) {
 		printRooms();
 		for(int i=0; i<intArray.length; i++){
 			out.println("Dzieñ "+i+" :");

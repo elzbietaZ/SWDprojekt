@@ -10,13 +10,22 @@ public class Timetable {
 	 * [day of the week from][time slot][room]
 	 * [int from 0 to Params.workingdays][int from 0 to Params.timeSlotsCount][roomId]
 	 */
-	public int [][][] timetable;
+	public Tuple<Integer, Integer> [][][] timetable;
+	public int [][][] curriculaDayTimeSlot;
+	public int [][][] roomDayTimeSlot;
+	
 	int roomsCount;
+	int curriculaNr;
 			
-	public Timetable(int roomsCount){
-		timetable = new int [Params.workingDays][Params.timeSlotsCount][roomsCount];
+	public Timetable(int roomsCount,int curriculaNr){
+		timetable = new Tuple [Params.workingDays][Params.timeSlotsCount][roomsCount];
+		curriculaDayTimeSlot= new int [curriculaNr][Params.workingDays][Params.timeSlotsCount];
+		roomDayTimeSlot= new int [roomsCount][Params.workingDays][Params.timeSlotsCount];
 		this.roomsCount=roomsCount;
+		this.curriculaNr=curriculaNr;
 		initializeTimetable();
+		initializeCurriculaTable();
+		initializeRoomsTable();
 	}
 	
 	/**
@@ -26,7 +35,27 @@ public class Timetable {
 		for(int i=0; i<Params.workingDays; i++){
 			for(int j=0; j<Params.timeSlotsCount; j++){
 				for(int k=0; k<roomsCount; k++){
-					timetable[i][j][k]=0;
+					timetable[i][j][k]=new Tuple<Integer, Integer>(0,0);
+				}
+			}
+		}
+	}
+	
+	private void initializeCurriculaTable(){
+		for(int i=0; i<curriculaNr; i++){
+			for(int j=0; j<Params.workingDays; j++){
+				for(int k=0; k<Params.timeSlotsCount; k++){
+					curriculaDayTimeSlot[i][j][k]=0;
+				}
+			}
+		}
+	}
+	
+	private void initializeRoomsTable(){
+		for(int i=0; i<roomsCount; i++){
+			for(int j=0; j<Params.workingDays; j++){
+				for(int k=0; k<Params.timeSlotsCount; k++){
+					roomDayTimeSlot[i][j][k]=0;
 				}
 			}
 		}
