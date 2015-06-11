@@ -1,18 +1,11 @@
 package Algorithms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import Model.Course;
 import Model.Curriculum;
 import Model.Tuple;
 import Model.UnavailabilityConstraint;
+
+import java.util.*;
 
 public class SubsidiaryMethods {
 
@@ -108,8 +101,14 @@ public class SubsidiaryMethods {
 
 		return sortByValue(unasignedLecturesNumber);
 	}
-	
-	
+
+	public static void copySolution(Tuple[][][] solution, Tuple[][][] destination){
+		for(int i = 0; i < solution.length; i++) {
+			for (int j = 0; j < solution[i].length; j++) {
+				System.arraycopy(solution[i][j], 0, destination[i][j], 0, solution[i][j].length);
+			}
+		}
+	}
 
 
 }
