@@ -24,12 +24,13 @@ public class TargetFunction {
                     if(coursesInCurriculums.contains(toRate[i][j][k])){
                         int min = j > 0 ? j-1 : 0;
                         int max = j < toRate[i].length-1 ? j+1 : toRate[i].length-1;
-                        if ((toRate[i][min][k].equals(new Tuple<Integer, Integer>(0,0))
+                        if ((toRate[i][min][k].equals(new Tuple(0,0))
                                 || !toRate[i][j][k].x.equals(toRate[i][min][k].x)
                                 || toRate[i][j][k].equals(toRate[i][min][k]))
-                                && (toRate[i][max][k].equals(new Tuple<Integer, Integer>(0,0))
+                                && (toRate[i][max][k].equals(new Tuple(0,0))
                                 || !toRate[i][j][k].x.equals(toRate[i][max][k].x))
                                 || toRate[i][j][k].equals(toRate[i][max][k])){
+//                            System.out.println("Min: " + toRate[i][min][k] + " Current: " + toRate[i][j][k] + " Max: " + toRate[i][max][k]);
                             rate++;
                         }
                     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import Algorithms.Params;
+import Algorithms.SubsidiaryMethods;
 
 public class Timetable {
 	 
@@ -81,6 +82,16 @@ public class Timetable {
 			}
 		}
 	}
+
+    public Timetable getCopy(){
+        Timetable copy = new Timetable(this.roomsCount, this.curriculaNr);
+        SubsidiaryMethods.copySolution(timetable, copy.timetable);
+        SubsidiaryMethods.copySolution(curriculaDayTimeSlot, copy.curriculaDayTimeSlot);
+        SubsidiaryMethods.copySolution(courseDayTimeSlot, copy.courseDayTimeSlot);
+        SubsidiaryMethods.copySolution(roomDayTimeSlot, copy.roomDayTimeSlot);
+        copy.dayCurrCourse = dayCurrCourse.clone();
+        return copy;
+    }
 
 	@Override
 	public String toString() {

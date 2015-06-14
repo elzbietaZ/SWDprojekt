@@ -1,5 +1,8 @@
 package Algorithms;
 
+import Model.Course;
+import Model.*;
+import Model.Timetable;
 import Model.Tuple;
 
 import java.util.List;
@@ -9,7 +12,8 @@ import java.util.List;
  */
 public class TabuSearch {
 
-    public static Tuple<Integer, String>[][][] getBestNeighbour(Tuple[][][] initSolution, List<Tuple<Tuple[][][], Tuple[][][]>> tabuList){
+    public static Tuple[][][] getBestNeighbour(Timetable solution, List<Tuple<Tuple[][][], Tuple[][][]>> tabuList){
+        Tuple [][][] initSolution = solution.timetable;
         Tuple [][][] bestSolution = new Tuple[initSolution.length][initSolution[0].length][initSolution[0][0].length];
         SubsidiaryMethods.copySolution(initSolution, bestSolution);
         Tuple<Tuple[][][], Tuple[][][]> move = null;
@@ -26,10 +30,14 @@ public class TabuSearch {
                                 }
                                 Tuple[][][] newSolution = new Tuple[initSolution.length][initSolution[0].length][initSolution[0][0].length];
                                 SubsidiaryMethods.copySolution(initSolution, newSolution);
+
+                                if(!isSwapingAvailable(i, j, k, p, r, s, bestSolution)){
+                                    continue;
+                                }
                                 newSolution = swapCourses(i, j, k, p, r, s, newSolution);
-                                move = new Tuple<Tuple[][][], Tuple[][][]>(initSolution, newSolution);
+                                move = new Tuple<>(initSolution, newSolution);
                                 if((TargetFunction.getTargetFunctionValue(newSolution) < TargetFunction.getTargetFunctionValue(bestSolution) || firstNeighbor)
-                                        && !tabuList.contains(move)){
+                                        && !tabuList.contains(move) ){
                                     firstNeighbor = false;
                                     SubsidiaryMethods.copySolution(newSolution, bestSolution);
                                 }
@@ -42,7 +50,6 @@ public class TabuSearch {
         if(move != null){
             tabuList.add(move);
         }
-
         return bestSolution;
     }
 
@@ -51,5 +58,69 @@ public class TabuSearch {
         solution[i][j][k] = solution[p][r][s];
         solution[p][r][s] = tmp;
         return solution;
+    }
+
+    private static boolean constraintsFullfiled(Course c, int day, int timeSlot) {
+        if (c == null || !Model.constraintsNumberForCourses.containsKey(c.getId())) {
+            return true;
+        } else {
+            List<Tuple> constraitsList = Model.constraintsForCourses.get(c
+                    .getId());
+            for (Tuple tuple : constraitsList) {
+                if ((int) tuple.x == day && (int) tuple.y == timeSlot) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean isSwapingAvailable(int i, int j, int k, int p, int r, int s, Tuple [][][] solution){
+        return (isCourseToSwap(i, j, k, solution) ||
+                isCourseToSwap(p, r, s, solution)) &&
+                isSwapingFullfiedConstraints(i, j, k, p, r, solution) &&
+                isSwapingFullfiedConstraints(p, r, s, i, j, solution) &&
+                !isSameCourseInDifferentRoom(i, j, k, p, r, s, solution) &&
+                !isSameCourseInDifferentRoom(p, r, s, i, j, k, solution) &&
+                !isAnyCurriculaCourseInDifferentRoom(i, j, k, p, r, s, solution) &&
+                !isAnyCurriculaCourseInDifferentRoom(p, r, s, i, j, k, solution) &&
+                isCapacityEnought(i, j, k, s, solution) &&
+                isCapacityEnought(p, r, s, k, solution);
+    }
+
+    private  static boolean isCourseToSwap(int i, int j, int k, Tuple [][][] solution){
+        return solution[i][j][k].y.hashCode() != 0;
+    }
+
+    private static boolean isSwapingFullfiedConstraints(int i, int j, int k, int p, int r, Tuple [][][] solution){
+        return constraintsFullfiled(Model.courses.get(solution[i][j][k].y.hashCode()), p, r);
+    }
+
+    private static boolean isSameCourseInDifferentRoom(int i, int j, int k, int p, int r, int s, Tuple [][][] solution){
+        for(int n = 0; n < solution[p][r].length && n != s; n++){
+            if(solution[p][r][n].x.equals(solution[i][j][k].x)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAnyCurriculaCourseInDifferentRoom(int i, int j, int k, int p, int r, int s, Tuple [][][] solution){
+        for(int n = 0; n < solution[p][r].length && n != s; n++){
+            if(solution[p][r][n].x.equals(solution[i][j][k].x)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isCapacityEnought(int i, int j, int k, int roomId, Tuple [][][] solution){
+        if(solution[i][j][k].y.equals(0)){
+            return true;
+        }
+        else{
+            return Model.rooms.get(roomId).getCapacity() >= Model.courses.get(solution[i][j][k].y.hashCode()).getNrOfStudents();
+        }
+
     }
 }

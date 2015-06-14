@@ -110,5 +110,16 @@ public class SubsidiaryMethods {
 		}
 	}
 
+    public static void copySolution(int[][][] solution, int[][][] destination){
+        if(solution != null){
+            for(int i = 0; i < solution.length; i++) {
+                for (int j = 0; j < solution[i].length; j++) {
+                    System.arraycopy(solution[i][j], 0, destination[i][j], 0, solution[i][j].length);
+                }
+            }
+        }
+
+    }
+
 
 }
