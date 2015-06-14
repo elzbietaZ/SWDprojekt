@@ -15,12 +15,14 @@ public class Launcher {
 	
 	public static void main(String [] arg){
 		DataPreparation dp=new DataPreparation();
-		dp.readEcttFile("exampleData/myExample.ctt");
+		dp.readEcttFile("exampleData/myExample2.ctt");
 		dp.runSubisidiaryMethods();
 		Initialization initialization=new Initialization();
 		initialization.makeInitialPlan();
 		final TimetablePrinter printer= new TimetablePrinter(System.out);
 		printer.printTimetable(Model.inicialTimetable.timetable);
+		System.out.println("Nieprzypisane zajêcia w potokach");
+		System.out.println(Model.unassignedInCurricula);
 
 		TargetFunction.initCoursesInCurriculums();
         System.out.println("Rate of compactness: " + TargetFunction.rateCompactness(Model.inicialTimetable.timetable));
