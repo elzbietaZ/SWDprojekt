@@ -19,21 +19,18 @@ public class Initialization {
 
 	public void makeInitialPlan() {
 
-		Course c = getCourseToAssign();
-		while (c != null) {
-			// System.out.println(c.getName());
-			// System.out.println(Model.constraintsNumberForCourses);
-			// System.out.println(Model.unasignedLecturesNumber.toString());
-			int unassignedCount = Model.unasignedLecturesNumber.get(c.getId());
-			Model.unasignedLecturesNumber.replace(c.getId(),
+		Course course = getCourseToAssign();
+		
+		while (course != null) {
+			int unassignedCount = Model.unasignedLecturesNumber.get(course.getId());
+			Model.unasignedLecturesNumber.replace(course.getId(),
 					unassignedCount - 1);
 
-			Curriculum curr = getCurriculumToAssign(c);
-			// System.out.println(Model.unassignedInCurricula);
+			Curriculum curr = getCurriculumToAssign(course);
 
-			findTimeAndRoom(curr, c);
+			findTimeAndRoom(curr, course);
 
-			c = getCourseToAssign();
+			course = getCourseToAssign();
 
 		}
 
@@ -102,6 +99,8 @@ public class Initialization {
 				.getId();
 		Model.inicialTimetable.timetable[day][timeSlot][room.getId()] = new Tuple(
 				curr.getId(), course.getName());
+		
+		assignInCurricula(course, curr);
 
 	}
 
@@ -125,16 +124,21 @@ public class Initialization {
 				.getId());
 		Iterator it = map.entrySet().iterator();
 		Map.Entry<Integer, Integer> selectedEntry = (Map.Entry) it.next();
-		int value = selectedEntry.getValue();
+		return Model.curicula.get(selectedEntry.getKey());
+	}
+	
+	private void assignInCurricula(Course course, Curriculum curr){
+		Map<Integer, Integer> map = Model.unassignedInCurricula.get(course
+				.getId());
+		int value = map.get(curr.getId());
 		value--;
 		if (value == 0) {
-			map.remove(selectedEntry.getKey());
+			map.remove(curr.getId());
 		} else {
-			map.replace(selectedEntry.getKey(), value);
+			map.replace(curr.getId(), value);
 		}
 		Model.unassignedInCurricula.replace(course.getId(), SubsidiaryMethods
 				.sortByValue(Model.unassignedInCurricula.get(course.getId())));
-		return Model.curicula.get(selectedEntry.getKey());
 	}
 
 	private Course getCourseToAssign() {
