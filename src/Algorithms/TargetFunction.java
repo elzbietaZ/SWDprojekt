@@ -12,8 +12,8 @@ public class TargetFunction {
 
     private static List<Tuple<Integer, String>> coursesInCurriculums = new ArrayList<>();
 
-    public static double getTargetFunctionValue(Tuple[][][] timetable){
-        return 5*rateCompactness(timetable) + 3*rateMinNumberDays(timetable) + rateMinWorkingDays(timetable);
+    public static double getTargetFunctionValue(int compactnessParam, int minNumberDaysParam, int minWorkingDaysParam, Tuple[][][] timetable){
+        return compactnessParam*rateCompactness(timetable) + minNumberDaysParam*rateMinNumberDays(timetable) + minWorkingDaysParam* rateNumberOfCoursesInFirstAndLastPeriod(timetable);
     }
 
     public static double rateCompactness(Tuple[][][] toRate){
@@ -22,15 +22,24 @@ public class TargetFunction {
             for (int j = 0; j < toRate[i].length; j++){
                 for (int k = 0; k < toRate[i][j].length; k++){
                     if(coursesInCurriculums.contains(toRate[i][j][k])){
-                        int min = j > 0 ? j-1 : 0;
-                        int max = j < toRate[i].length-1 ? j+1 : toRate[i].length-1;
-                        if ((toRate[i][min][k].equals(new Tuple(0,0))
-                                || !toRate[i][j][k].x.equals(toRate[i][min][k].x)
-                                || toRate[i][j][k].equals(toRate[i][min][k]))
-                                && (toRate[i][max][k].equals(new Tuple(0,0))
-                                || !toRate[i][j][k].x.equals(toRate[i][max][k].x))
-                                || toRate[i][j][k].equals(toRate[i][max][k])){
-//                            System.out.println("Min: " + toRate[i][min][k] + " Current: " + toRate[i][j][k] + " Max: " + toRate[i][max][k]);
+                        int earlier = j > 0 ? j-1 : 0;
+                        int later = j < toRate[i].length-1 ? j+1 : toRate[i].length-1;
+                        boolean isEarlier = false;
+                        boolean isLater = false;
+                        for(int p = 0; p < toRate[i][earlier].length; p++){
+                            if(toRate[i][j][k].x.equals(toRate[i][earlier][p].x) &&
+                                    !toRate[i][earlier][p].y.equals(0)){
+                                isEarlier = true;
+                            }
+                        }
+                        for(int p = 0; p < toRate[i][later].length; p++){
+                            if(toRate[i][j][k].x.equals(toRate[i][later][p].x) &&
+                                    !toRate[i][later][p].y.equals(0)){
+                                isLater = true;
+                            }
+                        }
+                        if (!(isEarlier || isLater)){
+//                            System.out.println("Compact: " + toRate[i][j][k]+" "+i+" "+j+" "+k);
                             rate++;
                         }
                     }
@@ -61,7 +70,7 @@ public class TargetFunction {
         return rate;
     }
 
-    public static double rateMinWorkingDays(Tuple[][][] toRate){
+    public static double rateNumberOfCoursesInFirstAndLastPeriod(Tuple[][][] toRate){
         double rate = 0;
         for(int i = 0; i < toRate.length; i++){
             for (int j = 0; j < toRate[i][0].length; j++){

@@ -12,11 +12,13 @@ import java.util.List;
  */
 public class TabuSearch {
 
-    public static Tuple[][][] getBestNeighbour(Timetable solution, List<Tuple<Tuple[][][], Tuple[][][]>> tabuList){
+    public static Tuple[][][] getBestNeighbour(Timetable solution, List<Tuple<Tuple[][][], Tuple[][][]>> tabuList,
+                                               int compactnessParam, int minNumberDaysParam, int minWorkingDaysParam){
         Tuple [][][] initSolution = solution.timetable;
         Tuple [][][] bestSolution = new Tuple[initSolution.length][initSolution[0].length][initSolution[0][0].length];
         SubsidiaryMethods.copySolution(initSolution, bestSolution);
         Tuple<Tuple[][][], Tuple[][][]> move = null;
+        Tuple<Tuple[][][], Tuple[][][]> reverseMove = null;
         boolean firstNeighbor = true;
 
         for(int i = 0; i < bestSolution.length; i++) {
@@ -35,8 +37,10 @@ public class TabuSearch {
                                     continue;
                                 }
                                 newSolution = swapCourses(i, j, k, p, r, s, newSolution);
-                                move = new Tuple<>(initSolution, newSolution);
-                                if((TargetFunction.getTargetFunctionValue(newSolution) < TargetFunction.getTargetFunctionValue(bestSolution) || firstNeighbor)
+                                move = new Tuple<Tuple[][][], Tuple[][][]>(initSolution, newSolution);
+                                reverseMove = new Tuple<Tuple[][][], Tuple[][][]>(newSolution, initSolution);
+                                if((TargetFunction.getTargetFunctionValue(compactnessParam, minNumberDaysParam, minWorkingDaysParam, newSolution) <
+                                        TargetFunction.getTargetFunctionValue(compactnessParam, minNumberDaysParam, minWorkingDaysParam, bestSolution) || firstNeighbor)
                                         && !tabuList.contains(move) ){
                                     firstNeighbor = false;
                                     SubsidiaryMethods.copySolution(newSolution, bestSolution);
@@ -49,6 +53,7 @@ public class TabuSearch {
         }
         if(move != null){
             tabuList.add(move);
+            tabuList.add(reverseMove);
         }
         return bestSolution;
     }
@@ -85,7 +90,8 @@ public class TabuSearch {
                 !(isAnyCurriculaCourseInDifferentRoom(i, j, k, p, r, s, solution) ||
                 isAnyCurriculaCourseInDifferentRoom(p, r, s, i, j, k, solution)) &&
                 isCapacityEnought(i, j, k, s, solution) &&
-                isCapacityEnought(p, r, s, k, solution);
+                isCapacityEnought(p, r, s, k, solution) &&
+                !(isSameCourseInDay(i, j, k, p, solution) || isSameCourseInDay(p, r, s, i, solution));
     }
 
     private  static boolean isCourseToSwap(int i, int j, int k, Tuple [][][] solution){
@@ -122,5 +128,15 @@ public class TabuSearch {
             return Model.rooms.get(roomId).getCapacity() >= Model.courses.get(solution[i][j][k].y.hashCode()).getNrOfStudents();
         }
 
+    }
+    private static boolean isSameCourseInDay(int i, int j, int k, int p, Tuple [][][] solution){
+        for(int m = 0; m < solution[p].length; m++){
+            for(int n = 0; n < solution[p][m].length; n++){
+                if(p != i && !solution[i][j][k].y.equals(0) && solution[i][j][k].equals(solution[p][m][n])){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
