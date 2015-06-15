@@ -1,0 +1,51 @@
+Name: Wlasny
+Courses: 10
+Rooms: 3
+Days: 5
+Periods_per_day: 5
+Curricula: 4
+Constraints: 11
+
+COURSES:
+Algorytmy Ratajczak 3 3 30 
+Analiza Górniak 2 2 42 
+Algebra Pietraszko 4 4 40 
+Logika Nguyen 4 4 18 
+Sieci Grzech 2 3 50
+BazyDanych Kazienko 2 3 40
+SI Kwaœnicka 2 5 15
+SieciNeur Kaczmar 2 4 45
+SysWebowe Ko³aczek 2 4 30
+Fizyka Newton 1 2 40
+Mobilne Waœko 3 4 20
+
+
+ROOMS:
+Sala1 32 
+Sala2 50
+Sala3 40 
+Sala4 45
+ 
+
+CURRICULA:
+Plan1 5 Algorytmy Analiza Algebra Sieci Fizyka
+Plan2 5 Algebra Logika Sieci SysWebowe Mobilne
+Plan3 5 BazyDanych Logika Sieci Algorytmy Mobilne
+Plan4 5 SI BazyDanych SieciNeur SysWebowe Fizyka
+ 
+
+UNAVAILABILITY_CONSTRAINTS:
+Algebra 1 0 
+Algebra 2 0 
+Algebra 3 2 
+Algebra 3 3 
+Analiza 4 0 
+Analiza 4 1 
+Analiza 4 2 
+Analiza 4 3 
+Sieci 4  2
+Sieci 4  3
+Sieci 4  4 
+
+END.
+ 
