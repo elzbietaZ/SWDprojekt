@@ -21,7 +21,7 @@ public class Launcher {
 		initialization.makeInitialPlan();
 		final TimetablePrinter printer= new TimetablePrinter(System.out);
 		printer.printTimetable(Model.inicialTimetable.timetable);
-		System.out.println("Nieprzypisane zajêcia w potokach");
+		System.out.println("Nieprzypisane zajï¿½cia w potokach");
 		System.out.println(Model.unassignedInCurricula);
 
 		TargetFunction.initCoursesInCurriculums();
@@ -43,6 +43,8 @@ public class Launcher {
 			if(TargetFunction.getTargetFunctionValue(currentSolution.timetable) < TargetFunction.getTargetFunctionValue(bestSolution.timetable)){
 				SubsidiaryMethods.copySolution(currentSolution.timetable, bestSolution.timetable);
 			}
+
+//            printer.printTimetable(bestSolution.timetable);
 			i++;
 		}
 		printer.printTimetable(bestSolution.timetable);

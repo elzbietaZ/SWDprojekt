@@ -31,7 +31,7 @@ public class TabuSearch {
                                 Tuple[][][] newSolution = new Tuple[initSolution.length][initSolution[0].length][initSolution[0][0].length];
                                 SubsidiaryMethods.copySolution(initSolution, newSolution);
 
-                                if(!isSwapingAvailable(i, j, k, p, r, s, bestSolution)){
+                                if(!isSwapingAvailable(i, j, k, p, r, s, newSolution)){
                                     continue;
                                 }
                                 newSolution = swapCourses(i, j, k, p, r, s, newSolution);
@@ -80,10 +80,10 @@ public class TabuSearch {
                 isCourseToSwap(p, r, s, solution)) &&
                 isSwapingFullfiedConstraints(i, j, k, p, r, solution) &&
                 isSwapingFullfiedConstraints(p, r, s, i, j, solution) &&
-                !isSameCourseInDifferentRoom(i, j, k, p, r, s, solution) &&
-                !isSameCourseInDifferentRoom(p, r, s, i, j, k, solution) &&
-                !isAnyCurriculaCourseInDifferentRoom(i, j, k, p, r, s, solution) &&
-                !isAnyCurriculaCourseInDifferentRoom(p, r, s, i, j, k, solution) &&
+                !(isSameCourseInDifferentRoom(i, j, k, p, r, s, solution) ||
+                isSameCourseInDifferentRoom(p, r, s, i, j, k, solution)) &&
+                !(isAnyCurriculaCourseInDifferentRoom(i, j, k, p, r, s, solution) ||
+                isAnyCurriculaCourseInDifferentRoom(p, r, s, i, j, k, solution)) &&
                 isCapacityEnought(i, j, k, s, solution) &&
                 isCapacityEnought(p, r, s, k, solution);
     }
@@ -97,8 +97,8 @@ public class TabuSearch {
     }
 
     private static boolean isSameCourseInDifferentRoom(int i, int j, int k, int p, int r, int s, Tuple [][][] solution){
-        for(int n = 0; n < solution[p][r].length && n != s; n++){
-            if(solution[p][r][n].x.equals(solution[i][j][k].x)){
+        for(int n = 0; n < solution[p][r].length; n++){
+            if(n != s && !solution[p][r][n].y.equals(0) && solution[p][r][n].y.equals(solution[i][j][k].y)){
                 return true;
             }
         }
@@ -106,8 +106,8 @@ public class TabuSearch {
     }
 
     private static boolean isAnyCurriculaCourseInDifferentRoom(int i, int j, int k, int p, int r, int s, Tuple [][][] solution){
-        for(int n = 0; n < solution[p][r].length && n != s; n++){
-            if(solution[p][r][n].x.equals(solution[i][j][k].x)){
+        for(int n = 0; n < solution[p][r].length; n++){
+            if(n != s && !solution[p][r][n].y.equals(0) && solution[p][r][n].x == solution[i][j][k].x){
                 return true;
             }
         }

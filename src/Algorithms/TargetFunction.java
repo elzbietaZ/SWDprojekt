@@ -13,7 +13,7 @@ public class TargetFunction {
     private static List<Tuple<Integer, String>> coursesInCurriculums = new ArrayList<>();
 
     public static double getTargetFunctionValue(Tuple[][][] timetable){
-        return rateCompactness(timetable) + rateMinNumberDays(timetable) + rateMinWorkingDays(timetable);
+        return 5*rateCompactness(timetable) + 3*rateMinNumberDays(timetable) + rateMinWorkingDays(timetable);
     }
 
     public static double rateCompactness(Tuple[][][] toRate){
